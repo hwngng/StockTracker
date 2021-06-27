@@ -9,7 +9,7 @@ render() {
     return (
         <div id="container" className="container-fluid">
             <div className="row">
-                <NavMenu />
+                <NavMenu/>
                 <Main />
             </div>
         </div>

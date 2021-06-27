@@ -2,7 +2,7 @@ namespace Services.Models
 {
     public enum TASignalCondition
     {
-        Above,
-        Below
+        Above = 0,
+        Below = 1
     }
 }

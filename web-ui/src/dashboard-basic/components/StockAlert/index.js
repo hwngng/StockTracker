@@ -29,6 +29,33 @@ export default class StockAlert extends Component {
             },
             "stockCodes": ["FLC","HAG","HSG","MBB","PDR","PVD","SHB","VIC","VND"]
         }
+        this.alertOption = {};
+        let alertOptionsStr = localStorage.getItem("alertOptions");
+        let alertOptions = {}
+        if (alertOptionsStr) {
+            try {
+                alertOptions = JSON.parse(alertOptionsStr);
+                if ("highestInRange" in alertOptions) {
+                    alertOptions["highestInRange"].toDate = this.formatDate(new Date(alertOptions["highestInRange"].toDate));
+                    let dateOffset = (24*60*60*1000)*parseInt(alertOptions["highestInRange"].fromDate);
+                    let fromDate = new Date();
+                    fromDate.setTime(new Date(alertOptions["highestInRange"].toDate).getTime() - dateOffset);
+                    alertOptions["highestInRange"].fromDate = this.formatDate(new Date(fromDate));
+                }
+                if ("lowestInRange" in alertOptions) {
+                    alertOptions["lowestInRange"].toDate = this.formatDate(new Date(alertOptions["lowestInRange"].toDate));
+                    let dateOffset = (24*60*60*1000)*parseInt(alertOptions["lowestInRange"].fromDate);
+                    let fromDate = new Date();
+                    fromDate.setTime(new Date(alertOptions["lowestInRange"].toDate).getTime() - dateOffset);
+                    alertOptions["lowestInRange"].fromDate = this.formatDate(new Date(fromDate));
+                }
+                this.alertOption = alertOptions;
+            } catch (e) {
+
+            }
+        }
+
+        console.log(this.alertOption);
         
         this.alertResult = {
             "highestInRange": [],
@@ -37,6 +64,8 @@ export default class StockAlert extends Component {
             "taSignals": {
             }
         };
+
+        this.apiRequestIntervalID = 0;
     }
 
     showAlert (type, stockCode) {
@@ -53,6 +82,25 @@ export default class StockAlert extends Component {
             default:
                 break;
         }
+    }
+
+    formatDate(date) {
+        let year = date.getFullYear();
+        let month = date.getMonth()+1;
+        let day = date.getDate();
+        if (!year) {
+            let currentDate = new Date();
+            year = currentDate.getFullYear();
+            month = currentDate.getMonth();
+            day = currentDate.getDate();
+        } else if (!month) {
+            month = 1;
+            day = 1;
+        } else if (!day) {
+            day = 1;
+        }
+
+        return `${year}-${month < 10 ? '0'+month : month}-${day < 10 ? '0'+day : day}`;
     }
 
     createAlerts (alertQueue, stockAlert) {
@@ -114,7 +162,11 @@ export default class StockAlert extends Component {
 
     componentDidMount() {
         let stockAlert = this;
-        setInterval(this.stockAlertSchedule, 1500, stockAlert);
+        this.apiRequestIntervalID = setInterval(this.stockAlertSchedule, 1500, stockAlert);
+    }
+
+    componentWillUnmount () {
+        clearInterval(this.apiRequestIntervalID);
     }
 
     render() {

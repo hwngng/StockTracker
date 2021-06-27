@@ -97,7 +97,9 @@ namespace Services
 				var stock = _stockPriceProvider.GetStock(stockCode);
 				Decimal currentPrice = 0.0m;
 				var noOfDay = pattern.Count;
-
+				if (noOfDay == 0) {
+					break;
+				}
 				if (!(stock is null))
 				{
 					currentPrice = stock.MatchPrice;

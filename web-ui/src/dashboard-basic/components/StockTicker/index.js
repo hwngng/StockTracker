@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { HubConnectionBuilder, } from '@microsoft/signalr';
 import axios from 'axios';
+import StockAlert from "../StockAlert";
 
 export default class StockTicker extends Component {
 
@@ -545,10 +546,11 @@ export default class StockTicker extends Component {
         
         contents = this.renderStockTable(this.state.stockObjs);
         return (
-            <div>
+            <>
                 <h2>Bảng giá</h2>
                 {contents}
-            </div>
+                <StockAlert apiUrl="http://localhost:5000/api/stock/alert"/>
+            </>
         );
     }
 }

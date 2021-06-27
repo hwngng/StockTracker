@@ -18,8 +18,13 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("alert")]
-        public AlertResult GetSnapshot ([FromBody] AlertOption alertOption) {
-            Debug.WriteLine(alertOption);
+        public AlertResult GetAlert ([FromBody] AlertOption alertOption) {
+            if (alertOption.PriceTrendPattern is null) {
+                alertOption.PriceTrendPattern = new List<PriceTrend>();
+            }
+            if (alertOption.TASignals is null) {
+                alertOption.TASignals = new Dictionary<string, TASignalCondition>();
+            }
             return this._alertService.GetAlertResult(alertOption);
         }
     }

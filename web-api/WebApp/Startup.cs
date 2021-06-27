@@ -45,9 +45,9 @@ namespace WebApp {
 
             // services.AddSingleton<IStockTickerServiceOld, RandomStockTicker>();
 
-            // services.AddSingleton<IDataSource>(new VNDStockDataFile("raw_data.txt"));
+            services.AddSingleton<IDataSource>(new VNDStockDataFile("raw_data.txt"));
 
-            services.AddSingleton<IDataSource>(new VNDStockDataSocket());
+            // services.AddSingleton<IDataSource>(new VNDStockDataSocket());
             
             services.AddSingleton<IStockTickerService, StockTickerService>();
 
