@@ -57,7 +57,7 @@ export default class AlertSettings extends Component {
             }
         }
 
-        this.AvailStockCodes = ["FLC","HAG","HSG","MBB","PDR","PVD","SHB","VIC","VND"];
+        this.AvailStockCodes = ["FLC","HAG","HSG","MBB","PDR","PVD","SHB","VIC","VND","ASP","FTS","GVR","HAG","HCM","HDC","SSI","TCB","TGG","VOS","VTO"];
 
         this.state = { 
             alertOptions: {

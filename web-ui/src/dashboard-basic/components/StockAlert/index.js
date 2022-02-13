@@ -27,7 +27,7 @@ export default class StockAlert extends Component {
             "TASignals": {
                 "sma": 1
             },
-            "stockCodes": ["FLC","HAG","HSG","MBB","PDR","PVD","SHB","VIC","VND"]
+            "stockCodes": ["FLC","HAG","HSG","MBB","PDR","PVD","SHB","VIC","VND","ASP","FTS","GVR","HAG","HCM","HDC","SSI","TCB","TGG","VOS","VTO"]
         }
         this.alertOption = {};
         let alertOptionsStr = localStorage.getItem("alertOptions");
@@ -48,6 +48,9 @@ export default class StockAlert extends Component {
                     let fromDate = new Date();
                     fromDate.setTime(new Date(alertOptions["lowestInRange"].toDate).getTime() - dateOffset);
                     alertOptions["lowestInRange"].fromDate = this.formatDate(new Date(fromDate));
+                }
+                if ("priceTrendPattern" in alertOptions) {
+                    alertOptions["priceTrendPattern"].forEach((val, idx) => alertOptions["priceTrendPattern"][idx] = parseInt(val));
                 }
                 this.alertOption = alertOptions;
             } catch (e) {
@@ -77,7 +80,7 @@ export default class StockAlert extends Component {
                 NotificationManager.info(`${stockCode} giá giảm thủng đáy 1 năm`, "", 3000);
                 break;
             case "priceTrendPattern":
-                NotificationManager.info(`${stockCode} giá giảm 3 phiên liên tục`, "", 3000);
+                NotificationManager.info(`${stockCode} giá tăng 3 phiên liên tục`, "", 3000);
                 break;
             default:
                 break;
@@ -129,7 +132,7 @@ export default class StockAlert extends Component {
     stockAlertSchedule (stockAlert) {
         let alertOption = stockAlert.alertOption;
         let alertQueue = {};
-        
+        console.log(alertOption);
         axios.post(stockAlert.apiUrl, alertOption)
         .then(function (response) {
             let tmpAlertResult = response.data;

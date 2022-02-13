@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { HubConnectionBuilder, } from '@microsoft/signalr';
 import axios from 'axios';
 import StockAlert from "../StockAlert";
+import StockChart from "../StockChart";
+import { Link } from 'react-router-dom';
 
 export default class StockTicker extends Component {
 
@@ -252,7 +254,7 @@ export default class StockTicker extends Component {
 
 
         this.connection = this.connect();
-        axios.get('http://localhost:5000/api/stock/snapshot?stockCodes=FLC,HAG,HSG,MBB,PDR,PVD,SHB,VIC,VND')
+        axios.get('http://localhost:5000/api/stock/snapshot?stockCodes=FLC,HAG,HSG,MBB,PDR,PVD,SHB,VIC,VND,ASP,FTS,GVR,HAG,HCM,HDC,SSI,TCB,TGG,VOS,VTO')
         .then(function (response) {
             let snapshots = response.data;
             let stockObjs = []
@@ -477,7 +479,7 @@ export default class StockTicker extends Component {
                         <tbody>
                         {stockObjs.map(s =>
                             <tr key={s.code}>
-                                <td>{s.code}</td>
+                                <td><Link to={`/stock-chart?code=${s.code}`} target="_blank" component={StockChart} >{s.code}</Link></td>
                                 <td>{this.formatFloat(s.basicPrice, 2)}</td>
                                 <td>{this.formatFloat(s.ceilingPrice, 2)}</td>
                                 <td>{this.formatFloat(s.floorPrice, 2)}</td>
